@@ -14,12 +14,14 @@ export default function SideBar(){
      
     return(
         <>
-      <ul>
+      
+        <ul>
         <li onClick={(_t:any)=>{handleClick("chapter1")}}>Chapter 1 </li>
         <li onClick={(_t:any)=>{handleClick("chapter2")}}>Chapter 2</li>
         <li onClick={(_t:any)=>{handleClick("chapter3")}}>Chapter 3</li>
         <li onClick={(_t:any)=>{handleClick("chapter4")}}>Chapter 4</li>
-      </ul>
+        </ul>
+     
         </>
     )
 }
