@@ -1,56 +1,79 @@
-'use client'
+"use client";
+
+import moment from "moment";
+import { useEffect, useState } from "react";
 export default function Home() {
-  // const d =new Date();
-  // let day = d.getDate();
-  // console.log(day,"day")
-  // let time = d.getTime();
-  // console.log(time,"time")
-  // var datetime = ("2000-01-01 01:00:00 UTC");
-var d1 = new Date();
-var minute = d1.getMinutes();
-var hour = d1.getHours();
-// console.log(d1,"d1",minute,"min",hour,"hr")
-// if(minute > 0)  
-//      alert(hour+"."+minute);
-// else
-//      alert(hour);
-// const date = Date().slice(16,21);
-// console.log(date,"new");
+  const [dateArray, setDateArray] = useState<any>([]);
+  const [isActive, setIsActive] = useState<any>(true);
 
-// const datetime = (new Date().getTime() + 60 * 60 * 24 * 1000);
-// console.log(datetime,"qw")
-// var day = new Date('Oct 30, 2000');
-// console.log(day); // Apr 30 2000
+  const ar = dateArray.map((arr: any) => console.log(arr, "first"));
+  useEffect(() => {
+    getDate();
+    let today = moment().format("YYYY-MM-DD");
+    console.log(today, "today");
+    if (ar >= today) {
+      setIsActive(true);
+    } else {
+      setIsActive(false);
+    }
+    // setIsActive(true)
+  }, [isActive]);
+  console.log(isActive, "isactive");
 
-// var nextDay = new Date(day);
-// nextDay.setDate(day.getDate() + 1);
-// console.log(nextDay); // May 01 2000  
+  const startOfMonth: any = moment().startOf("month").format("YYYY-MM-DD ");
+  const endOfMonth: any = moment().endOf("month").format("YYYY-MM-DD ");
 
-// var today = new Date();
-// var priorDate = new Date(new Date().setDate(today.getDate() + 30));
+  const getDate = () => {
+    var dateArray = [];
+    var currentDate = moment(startOfMonth);
+    var stopDate = moment(endOfMonth);
+    while (currentDate <= stopDate) {
+      dateArray.push(moment(currentDate).format("YYYY-MM-DD"));
+      currentDate = moment(currentDate).add(1, "days");
+    }
+    // return dateArray;
+    setDateArray(dateArray.map((x) => x));
+  };
 
-// console.log(today,'today')
-// console.log(priorDate,"prior");
+  const handleClick = (e: any) => {
+    console.log(e, "clicked");
+    let today = moment().format("YYYY-MM-DD");
+    console.log(today, "today");
+    if (e >= today) {
+      setIsActive(true);
+    } else {
+      console.log("less than today");
+      setIsActive(false);
+    }
+  };
 
-// let now = new Date()
-// console.log('Today: ' + now.toUTCString())
-// let next30days = new Date(now.setDate(now.getDate() + 30))
-// console.log('Next 30th day: ' + next30days.toUTCString())
-  
-const now = new Date();
-const day2 = new Date(now.setDate(now.getDate() + 30))
-console.log(day2,"day2")
+  return (
+    <>
+      <div
+        style={{
+          textAlign: "center",
+          textDecorationLine: "underline",
+          color: "darkmagenta",
+          fontSize: "20px",
+          fontWeight: "bolder",
+        }}
+      >
+        Date & Time
+      </div>
 
-
-return (
-   <>
-  <div style={{ textAlign: 'center', textDecorationLine: 'underline',color:'darkmagenta',fontSize:"20px",fontWeight:"bolder"}}>
-  Date & Time
-  </div>
-
-  <div>
-    {/* {value} */}
-  </div>
-   </>
-  )
+      <span>
+        {dateArray?.map((dates: any) => (
+          // eslint-disable-next-line react/jsx-key
+          <span
+            key={dates}
+            onClick={() => {
+              handleClick(dates);
+            }}
+          >
+            <h6>{moment(dates).format("DD MMMM YYYY")}</h6>
+          </span>
+        ))}
+      </span>
+    </>
+  );
 }
