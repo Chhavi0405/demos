@@ -6,17 +6,9 @@ export default function Home() {
   const [dateArray, setDateArray] = useState<any>([]);
   const [isActive, setIsActive] = useState<any>(true);
 
-  const ar = dateArray.map((arr: any) => console.log(arr, "first"));
+  const ar = dateArray.map((arr: any) => arr);
   useEffect(() => {
     getDate();
-    let today = moment().format("YYYY-MM-DD");
-    console.log(today, "today");
-    if (ar >= today) {
-      setIsActive(true);
-    } else {
-      setIsActive(false);
-    }
-    // setIsActive(true)
   }, [isActive]);
   console.log(isActive, "isactive");
 
@@ -42,11 +34,9 @@ export default function Home() {
     if (e >= today) {
       setIsActive(true);
     } else {
-      console.log("less than today");
       setIsActive(false);
     }
   };
-
   return (
     <>
       <div
@@ -63,15 +53,24 @@ export default function Home() {
 
       <span>
         {dateArray?.map((dates: any) => (
-          // eslint-disable-next-line react/jsx-key
-          <span
-            key={dates}
-            onClick={() => {
+          <li
+          key={dates}
+          style={{
+            cursor: isActive && dates >= moment().format("YYYY-MM-DD")
+              ? 'pointer'
+              : 'not-allowed',
+            color: dates >= moment().format("YYYY-MM-DD")
+              ? 'black'
+              : 'gray', 
+          }}
+          onClick={() => {
+            if (isActive && dates >= moment().format("YYYY-MM-DD")) {
               handleClick(dates);
-            }}
-          >
-            <h6>{moment(dates).format("DD MMMM YYYY")}</h6>
-          </span>
+            }
+          }}
+        >
+          <p>{moment(dates).format("DD MMMM YYYY")}</p>
+        </li>
         ))}
       </span>
     </>
