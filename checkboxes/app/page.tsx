@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import React, { useState ,useEffect } from 'react';
 
 export default function Home() {
   const arrayTime = [
@@ -75,42 +75,59 @@ export default function Home() {
     }
 ]
 
-// const [arr,setArr] = useState<any>()
+  const [arr, setArr] = useState<any>(arrayTime);
 
-arrayTime.map((data:any)=>{console.log(data)})
+  const [checkedStatus, setCheckedStatus] = useState<any>({});
 
-const handleChange=()=>{
+  useEffect(() => {
+    const initialChecked:any = {};
+    arrayTime.forEach((item) => {
+      initialChecked[item.id] = item.status;
+    });
+     
+    setCheckedStatus(initialChecked);
+  }, []);
 
-}
+
+  const handleCheckbox = (id: any, value:any) => {
+    console.log(id,"id",value,"checked")
+    setCheckedStatus({ ...checkedStatus, [id]: value });
+    const updatedArr = arr.map((item: any) => {
+      if (item.id === id) {
+        return { ...item, status: value };
+      }
+      return item;
+    });
+    setArr(updatedArr);
+  };
+
   return (
     <>
-    <h3 style={{textAlign:"center", textDecorationLine:"underline"}}>Multiple checkboxes</h3>
-   
-   <br/>
-    <div style={{textAlign:"center"}}>
-
-    {arrayTime.map((data:any)=>{
-      return(
-        <ul key={data.id}>
-       <li>
-        <input
-        type='checkbox'
-        value={data.weekday}
-        name={data.weekday}
-        checked ={data.status}
-        onChange={handleChange}
-        />
-        <label htmlFor={`styled-checkbox ${data._id}`}>
-                              {data.weekday} &nbsp;
-                              <span>
-                                {data.opening_time} {data.closing_time}
-                              </span>
-                            </label>
-       </li>
-        </ul>
-      )
-    })}
-    </div> 
+      <h3 style={{ textAlign: 'center', textDecorationLine: 'underline' }}>Multiple checkboxes</h3>
+      <br />
+      <div style={{ textAlign: 'center' }}>
+        {arrayTime?.map((data: any) => {
+          return (
+            <ul key={data.id}>
+              <li>
+                <input
+                  id={`checkbox-${data.id}`}
+                  type="checkbox"
+                  value={data.id}
+                  checked={checkedStatus[data.id] }
+                  onChange={(e:any) => handleCheckbox(data.id, e.target.checked)}
+                />
+                <label htmlFor={`checkbox-${data.id}`}>
+                  {data.weekday} &nbsp;
+                  <span>
+                    {data.opening_time} - {data.closing_time}
+                  </span>
+                </label>
+              </li>
+            </ul>
+          );
+        })}
+      </div>
     </>
-  )
+  );
 }
