@@ -5,12 +5,13 @@ import { useEffect, useState } from "react";
 export default function Home() {
   const [dateArray, setDateArray] = useState<any>([]);
   const [isActive, setIsActive] = useState<any>(true);
-
+  const [isDate,setIsDate] = useState<any>()
+  const [isTime,setIsTime] = useState<any>([])
   const ar = dateArray.map((arr: any) => arr);
   useEffect(() => {
     getDate();
+    getTime();
   }, [isActive]);
-  console.log(isActive, "isactive");
 
   const startOfMonth: any = moment().startOf("month").format("YYYY-MM-DD ");
   const endOfMonth: any = moment().endOf("month").format("YYYY-MM-DD ");
@@ -28,15 +29,22 @@ export default function Home() {
   };
 
   const handleClick = (e: any) => {
-    console.log(e, "clicked");
-    let today = moment().format("YYYY-MM-DD");
-    console.log(today, "today");
-    if (e >= today) {
-      setIsActive(true);
-    } else {
-      setIsActive(false);
-    }
+    // console.log(e, "clicked");
+    setIsDate(e)
   };
+
+const getTime =()=>{
+  const start = moment().startOf('day');
+  const times = 24 * 2; 
+  const toPrint= moment(startOfMonth)
+  for (let i = 0; i < times; i++) {
+    isTime.push(moment(toPrint)
+      .add(30 * i, 'minutes')
+      .format('hh:mm A'))
+  }
+  setIsTime(isTime.map((y: any) => y));
+}
+ 
   return (
     <>
       <div
@@ -50,29 +58,41 @@ export default function Home() {
       >
         Date & Time
       </div>
-
+      <p>{isDate} </p>
       <span>
         {dateArray?.map((dates: any) => (
           <li
           key={dates}
-          style={{
-            cursor: isActive && dates >= moment().format("YYYY-MM-DD")
-              ? 'pointer'
-              : 'not-allowed',
-            color: dates >= moment().format("YYYY-MM-DD")
-              ? 'black'
-              : 'gray', 
-          }}
-          onClick={() => {
-            if (isActive && dates >= moment().format("YYYY-MM-DD")) {
-              handleClick(dates);
-            }
-          }}
+          // style={{
+          //   cursor: isActive && dates >= moment().format("YYYY-MM-DD")
+          //     ? 'pointer'
+          //     : 'not-allowed',
+          //   color: dates >= moment().format("YYYY-MM-DD")
+          //     ? 'black'
+          //     : 'gray', 
+          // }}
+          // onClick={() => {
+          //   if (isActive && dates >= moment().format("YYYY-MM-DD") ) {
+          //     handleClick(dates);
+          //   }
+          // }}
         >
-          <p>{moment(dates).format("DD MMMM YYYY")}</p>
+           <p>{moment(dates).format("DD MMMM YYYY")}</p>
+
+         <ul>
+         {isTime?.map((times:any)=>(
+            <li key={times}>
+            {times}
+            </li>
+          ))}
+         </ul>
+         
         </li>
         ))}
+                 
       </span>
+
+      
     </>
   );
 }
