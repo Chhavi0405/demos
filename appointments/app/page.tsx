@@ -6,24 +6,21 @@ export default function Home() {
   const [dateArray, setDateArray] = useState<any>([]);
   const [isActive, setIsActive] = useState<any>(true);
   const [isDate, setIsDate] = useState<any>();
-  
   const [selectedDate, setSelectedDate] = useState<any>();
+  const [selectedTime, setSelectedTime] = useState<any>();
 
   useEffect(() => {
     getDate();
-   
   }, [isActive]);
 
   const startOfMonth: any = moment().startOf("month").format("YYYY-MM-DD ");
   const endOfMonth: any = moment().endOf("month").format("YYYY-MM-DD ");
- 
 
   const startTime = moment('8:00 AM', 'h:mm A');
   const endTime = moment('9:00 PM', 'h:mm A');
+  const timeSlotInterval = 30;
 
-  // console.log(startTime,"startTime",endTime)
-  const currentTime = moment().format('hh:mm A')
-  console.log(currentTime,"current")
+  const currentTime = moment().format('hh:mm A');
 
   const getDate = () => {
     var dateArray = [];
@@ -33,23 +30,30 @@ export default function Home() {
       dateArray.push(moment(currentDate).format("YYYY-MM-DD"));
       currentDate = moment(currentDate).add(1, "days");
     }
-    // return dateArray;
     setDateArray(dateArray.map((x) => x));
   };
 
   const handleClick = (e: any) => {
-    // console.log(e, "clicked");
     setIsDate(e);
     setSelectedDate(e);
-    // setIsActive(false)
   };
 
-  
+  const getTime = () => {
+    const timeArray = [];
 
-  
-  
+    let currentTimeSlot = moment(startTime);
 
-  
+    while (currentTimeSlot <= endTime) {
+      const timeSlot = currentTimeSlot.format("hh:mm A");
+      timeArray.push(timeSlot);
+      currentTimeSlot = currentTimeSlot.add(timeSlotInterval, "minutes");
+    }
+
+    return timeArray;
+  };
+
+  const timeSlots = getTime();
+
   return (
     <>
       <div
@@ -85,8 +89,47 @@ export default function Home() {
           </li>
         ))}
       </div>
-
-     
+      {selectedDate && (
+        <div>
+          <h2>Select a time slot:</h2>
+          <ul>
+            {timeSlots.map((timeSlot: string) => (
+              <li
+                key={timeSlot}
+                style={{
+                  cursor:
+                    selectedDate === moment().format("YYYY-MM-DD") &&
+                    moment(timeSlot, 'h:mm A') <= moment(currentTime, 'h:mm A')
+                      ? 'not-allowed'
+                      : 'pointer',
+                  color:
+                    selectedDate === moment().format("YYYY-MM-DD") &&
+                    moment(timeSlot, 'h:mm A') <= moment(currentTime, 'h:mm A')
+                      ? 'gray'
+                      : 'black',
+                }}
+                onClick={() => {
+                  if (
+                    !(
+                      selectedDate === moment().format("YYYY-MM-DD") &&
+                      moment(timeSlot, 'h:mm A') <= moment(currentTime, 'h:mm A')
+                    )
+                  ) {
+                    setSelectedTime(timeSlot);
+                  }
+                }}
+              >
+                {timeSlot}
+              </li>
+            ))}
+          </ul>
+          <p>
+            {selectedTime
+              ? `Selected Time: ${selectedTime}`
+              : "Please select a time."}
+          </p>
+        </div>
+      )}
     </>
   );
 }
