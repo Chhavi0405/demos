@@ -1,35 +1,48 @@
 "use client";
 
-import moment from "moment";
+import moment from "moment-timezone";
 import { useEffect, useState } from "react";
 export default function Home() {
-  const [dateArray, setDateArray] = useState<any>([]);
-  const [isActive, setIsActive] = useState<any>(true);
-  const [isDate, setIsDate] = useState<any>();
-  const [selectedDate, setSelectedDate] = useState<any>();
-
   useEffect(() => {
-    getDate();
-  }, [isActive]);
+    getTimeZone();
+  }, []);
+  const [zoneArray, setZoneArray] = useState<any>([]);
+  const [selectedZone, setSelectedZone] = useState<any>();
+  const [rawTime, setRawTime] = useState("00:00");
+  // const [selectedPlaceTime,setSelectedPlaceTime] = useState<any>("00:00")
+  const [displayResults, setDisplayResults] = useState<any>([]);
 
-  const startOfMonth: any = moment().startOf("month").format("YYYY-MM-DD ");
-  const endOfMonth: any = moment().endOf("month").format("YYYY-MM-DD ");
+  const getTimeZone = () => {
+    let zoneArrayss = [];
+    const timezone = moment.tz.names();
+    zoneArrayss = timezone;
+    setZoneArray(zoneArrayss);
+  };
+  // const timeZones = ["GMT", "Europe/Madrid", "Asia/Tokyo", "Asia/Kolkata"];
 
-  const getDate = () => {
-    var dateArray = [];
-    var currentDate = moment(startOfMonth);
-    var stopDate = moment(endOfMonth);
-    while (currentDate <= stopDate) {
-      dateArray.push(moment(currentDate).format("YYYY-MM-DD"));
-      currentDate = moment(currentDate).add(1, "days");
+  const placeZone =()=>{
+    const timed = moment(`${rawTime}`, "HH:mm ");
+
+    const convert: any = timed._d;
+    let displayDate;
+    const results = [];
+    for (let timeZone of zoneArray) {
+      displayDate = Intl.DateTimeFormat("en-GB", {
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric",
+        // hour12: true,
+        timeZone: timeZone,
+      }).format(convert);
+      results.push({ timeZone, displayDate });
+      // console.log("%s @ %s", displayDate, timeZone);
     }
-    setDateArray(dateArray.map((x) => x));
-  };
-
-  const handleClick = (e: any) => {
-    setIsDate(e);
-    setSelectedDate(e);
-  };
+    setDisplayResults(results);
+  }
+  // const placeTime = placeZone();
+  useEffect(() => {
+    placeZone();
+  }, [rawTime, zoneArray]);
 
   return (
     <>
@@ -44,31 +57,30 @@ export default function Home() {
       >
         Calendar
       </div>
-      <p style={{textAlign:"center", fontWeight: "bolder",}}>{moment().format("MMMM YYYY")}</p>
-      <p style={{textAlign:"left", fontWeight: "bolder",}}>{isDate} </p>
+<hr/>
       <div>
-        {dateArray?.map((dates: any) => (
-          <li
-            key={dates}
-            style={{
-              cursor:
-                isActive && dates >= moment().format("YYYY-MM-DD")
-                  ? "pointer"
-                  : "not-allowed",
-              color: dates >= moment().format("YYYY-MM-DD") ? "black" : "gray",
-            }}
-            onClick={() => {
-              if (isActive && dates >= moment().format("YYYY-MM-DD")) {
-                handleClick(dates);
-              }
-            }}
-          >
-            
-            <p>{moment(dates).format("DD MMMM YYYY")}</p>
-          </li>
-        ))}
+        <label>enter time:</label>
+        <input
+          className="time-input"
+          type="time"
+          onChange={(ev) => setRawTime(ev.target.value)}
+          value={rawTime}
+        />
       </div>
-      
+      <p>entered time::{rawTime}</p>
+      <hr />
+    
+      <hr />
+      <p>List of time zone</p>
+
+     
+      {displayResults.map((result:any, index:any) => (
+          <div key={index}>
+            <p>
+              {result.displayDate} @ {result.timeZone}
+            </p>
+          </div>
+        ))}
     </>
   );
 }
