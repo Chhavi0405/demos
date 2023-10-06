@@ -7,7 +7,6 @@ export default function Home() {
     getTimeZone();
   }, []);
   const [zoneArray, setZoneArray] = useState<any>([]);
-  const [selectedZone, setSelectedZone] = useState<any>();
   const [rawTime, setRawTime] = useState("00:00");
   // const [selectedPlaceTime,setSelectedPlaceTime] = useState<any>("00:00")
   const [displayResults, setDisplayResults] = useState<any>([]);
@@ -31,7 +30,7 @@ export default function Home() {
         hour: "numeric",
         minute: "numeric",
         second: "numeric",
-        // hour12: true,
+        hour12: true,
         timeZone: timeZone,
       }).format(convert);
       results.push({ timeZone, displayDate });
