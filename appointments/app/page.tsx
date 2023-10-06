@@ -1,6 +1,7 @@
 "use client";
 
-import moment from "moment";
+// import moment from "moment";
+import moment from 'moment-timezone';
 import { useEffect, useState } from "react";
 export default function Home() {
   const [dateArray, setDateArray] = useState<any>([]);
@@ -21,6 +22,8 @@ export default function Home() {
   const timeSlotInterval = 30;
 
   const currentTime = moment().format('hh:mm A');
+const timezone = moment.tz.names()
+console.log(timezone,"timezone")
 
   const getDate = () => {
     var dateArray = [];
