@@ -9,8 +9,8 @@ export default function Home() {
   const [zoneArray, setZoneArray] = useState<any>([]);
   const [rawTime, setRawTime] = useState("00:00");
   const [displayResults, setDisplayResults] = useState<any>([]);
-   const [selectedTimeZone, setSelectedTimeZone] = useState<string | null>(null);
- const [selectedTime, setSelectedTime] = useState<string>("");
+   const [selectedTimeZone, setSelectedTimeZone] = useState<any>();
+ const [selectedTime, setSelectedTime] = useState<any>("");
   const getTimeZone = () => {
     let zoneArrayss = [];
     const timezone = moment.tz.names();
@@ -20,7 +20,7 @@ export default function Home() {
   // const timeZones = ["GMT", "Europe/Madrid", "Asia/Tokyo", "Asia/Kolkata"];
 
   const placeZone =()=>{
-    const timed = moment(`${rawTime}`, "HH:mm ");
+    const timed = moment(`${rawTime}`, "HH:mm A");
 
     const convert: any = timed._d;
     let displayDate;
@@ -45,7 +45,7 @@ export default function Home() {
 
   useEffect(() => {
     if (selectedTimeZone) {
-      const currentTime = moment().tz(selectedTimeZone).format("HH:mm");
+      const currentTime = moment().tz(selectedTimeZone).format(" DD-MM-YYYY,HH:mm A");
       setSelectedTime(currentTime);
     } else {
       setSelectedTime("");
@@ -133,7 +133,7 @@ export default function Home() {
           display: "block", 
           margin: "30px", 
        }}>
-          Current time in {selectedTimeZone}: {selectedTime}
+          Current time in {selectedTimeZone}: {selectedTime} 
         </p>
       )}
       {/* <p>List of time zone</p>
