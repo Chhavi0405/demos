@@ -4,8 +4,10 @@ import { persistReducer, persistStore } from "redux-persist";
 import thunk from "redux-thunk";
 import { combineReducers } from "@reduxjs/toolkit";
 import reminderReducer from './reminderSlice'
+import dateReducer from './dateSlice'
 const rootReducer = combineReducers({
-reminder:reminderReducer
+reminder:reminderReducer,
+date:dateReducer
 });
 
 const persistConfig = {
