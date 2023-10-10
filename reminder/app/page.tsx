@@ -1,5 +1,6 @@
 "use client";
 
+import { dated } from "@/redux/dateSlice";
 import { reminderAdd } from "@/redux/reminderSlice";
 import moment from "moment";
 import { useEffect, useState } from "react";
@@ -11,8 +12,8 @@ export default function Home() {
   const [addText, setAddText] = useState<any>();
   const dispatch = useDispatch();
 
-  // const data = useSelector((state: any) => state.date);
-  // console.log(data, "data");
+  const data = useSelector((state: any) => state.reminder.data);
+  console.log(data, "data");
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const getDate = () => {
     var dateArray = [];
@@ -27,13 +28,14 @@ export default function Home() {
 
   useEffect(() => {
     getDate();
-  }, [selectedDate]);
+  }, []);
 
   const startOfMonth: any = moment().startOf("month").format("YYYY-MM-DD ");
   const endOfMonth: any = moment().endOf("month").format("YYYY-MM-DD ");
 
 const handleClick =(e:any)=>{
   setSelectedDate(e)
+  // dispatch(dated(selectedDate))
   console.log(e.target.value,"check")
 }
 
@@ -93,7 +95,7 @@ setAddText(event.target.value)
        { selectedDate && (<form onSubmit={handleSubmit}>
         {selectedDate} is & reminder is &nbsp;
         <input 
-        style={{color:'red'}}
+        style={{color:'red',border:'2px solid black'}}
         type="text"
         value={addText}
         onChange={handleText}

@@ -7,7 +7,7 @@ import reminderReducer from './reminderSlice'
 import dateReducer from './dateSlice'
 const rootReducer = combineReducers({
 reminder:reminderReducer,
-date:dateReducer
+dated:dateReducer
 });
 
 const persistConfig = {

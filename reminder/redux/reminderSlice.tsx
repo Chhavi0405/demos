@@ -10,7 +10,6 @@ export const reminderSlice = createSlice({
     reducers:{
         reminderAdd:(state:any,action:any)=>{
             const dataList ={
-              
                 text:action.payload
             }
             state.data.push(dataList)
