@@ -14,10 +14,10 @@ export const reminderSlice = createSlice({
                 text:action.payload
             }
             state.data.push(dataList)
-        }
+        },
 
     }
 })
-export const {reminderAdd} = reminderSlice.actions
+export const {reminderAdd} = reminderSlice.actions;
 
 export default reminderSlice.reducer

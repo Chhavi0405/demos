@@ -1,17 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
-// import phoneReducer from "./features/phoneSlice";
 import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
 import thunk from "redux-thunk";
 import { combineReducers } from "@reduxjs/toolkit";
-// import authReducer from "./features/authSlice";
-// import serviceReducer from "./features/servicecartSlice";
-// import bookingReducer from "./features/bookingSlice";
+import reminderReducer from './reminderSlice'
 const rootReducer = combineReducers({
-//   phone: phoneReducer,
-//   auth: authReducer,
-//   service: serviceReducer,
-//   booking: bookingReducer,
+reminder:reminderReducer
 });
 
 const persistConfig = {
