@@ -35,7 +35,7 @@ export default function Home() {
 
 const handleClick =(e:any)=>{
   setSelectedDate(e)
-  // dispatch(dated(selectedDate))
+  // dispatch(dated(selectedDanp te))
   console.log(e.target.value,"check")
 }
 
