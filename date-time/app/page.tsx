@@ -91,7 +91,7 @@ export default function Home() {
     if (
       !(
         selectedDate === moment().format("YYYY-MM-DD") &&
-        moment(timeSloted, "h:mm A") <= moment(currentTime, "h:mm A")
+        moment(timeSloted, "h:mm A") <= moment(startedTime, "h:mm A")
       )
     ) {
       setEndTime(timeSloted);
@@ -114,6 +114,7 @@ export default function Home() {
     setEndTime(selectedEndTime);
   };
 
+ 
   return (
     <>
       <div
@@ -226,7 +227,7 @@ export default function Home() {
                     handleEndTime(timeSloted);
                   }}
                   disabled={
-                    selectedDate === moment().format("YYYY-MM-DD") &&
+                    // selectedDate === moment().format("YYYY-MM-DD") &&
                     moment(timeSloted, "h:mm A") <=
                       moment(startedTime, "h:mm A")
                   }
