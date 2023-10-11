@@ -1,6 +1,5 @@
 "use client";
 
-import { dated } from "@/redux/dateSlice";
 import { reminderAdd } from "@/redux/reminderSlice";
 import moment from "moment";
 import { useEffect, useState } from "react";
@@ -35,7 +34,7 @@ export default function Home() {
 
 const handleClick =(e:any)=>{
   setSelectedDate(e)
-  // dispatch(dated(selectedDanp te))
+  // dispatch(dated())
   console.log(e.target.value,"check")
 }
 
@@ -51,8 +50,19 @@ setAddText(e.target.value)
 const handleSubmit = (event:any)=>{
   event.preventDefault();
 console.log(addText,"value")
-dispatch(reminderAdd(addText))
-setAddText(event.target.value)
+
+
+if (selectedDate && addText) {
+  const reminderData: any = {
+    dated: selectedDate,
+    text: addText,
+  };
+
+  dispatch(reminderAdd(reminderData));
+}
+
+
+setAddText('');
 }
 
 
