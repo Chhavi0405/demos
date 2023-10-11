@@ -12,7 +12,7 @@ export default function Home() {
   const dispatch = useDispatch();
 
   const dataReminder = useSelector((state: any) => state.reminder.data);
-  // console.log(dataReminder,"selector")
+  console.log(dataReminder,"selector")
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const getDate = () => {
     var dateArray = [];
@@ -40,6 +40,7 @@ export default function Home() {
     setSelectedDate(event.target.value);
   };
 
+  // const showData:[] = re
   console.log(addReminder, "addremindr");
 
   const handleSubmit = (event: any) => {
@@ -109,6 +110,16 @@ export default function Home() {
             </form>
           </>
         )}
+      </div>
+
+      <div>
+        <p>Data</p>
+        <ul>
+    {dataReminder?.map((item: any, index: any) => (
+      <li key={index}>{item?.text}</li>
+    ))}
+  </ul>
+
       </div>
     </>
   );
