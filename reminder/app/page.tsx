@@ -8,11 +8,11 @@ import { useDispatch, useSelector } from "react-redux";
 export default function Home() {
   const [dateArray, setDateArray] = useState<any>([]);
   const [selectedDate, setSelectedDate] = useState<any>();
-  const [addText, setAddText] = useState<any>();
+  const [addReminder, setAddReminder] = useState<any>([]);
   const dispatch = useDispatch();
 
-  const data = useSelector((state: any) => state.reminder.data);
-  console.log(data, "data");
+  const dataReminder = useSelector((state: any) => state.reminder.data);
+  // console.log(dataReminder,"selector")
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const getDate = () => {
     var dateArray = [];
@@ -32,43 +32,35 @@ export default function Home() {
   const startOfMonth: any = moment().startOf("month").format("YYYY-MM-DD ");
   const endOfMonth: any = moment().endOf("month").format("YYYY-MM-DD ");
 
-const handleClick =(e:any)=>{
-  setSelectedDate(e)
-  // dispatch(dated())
-  console.log(e.target.value,"check")
-}
+  const handleClick = (e: any) => {
+    setSelectedDate(e);
+  };
 
   const handleDateChange = (event: any) => {
     setSelectedDate(event.target.value);
   };
 
-const handleText =(e:any)=>{
-  console.log(e.target.value,"text")
-setAddText(e.target.value)
-}
+  console.log(addReminder, "addremindr");
 
-const handleSubmit = (event:any)=>{
-  event.preventDefault();
-console.log(addText,"value")
+  const handleSubmit = (event: any) => {
+    event.preventDefault();
+    console.log(addReminder, "value");
 
+    if (selectedDate && addReminder) {
+      const reminderData: any = {
+        dated: selectedDate,
+        text: addReminder,
+      };
 
-if (selectedDate && addText) {
-  const reminderData: any = {
-    dated: selectedDate,
-    text: addText,
+      dispatch(reminderAdd(reminderData));
+    }
+
+    setAddReminder("");
   };
-
-  dispatch(reminderAdd(reminderData));
-}
-
-
-setAddText('');
-}
-
 
   return (
     <>
-      <div style={{textAlign:"center",fontWeight:"bolder"}}>
+      <div style={{ textAlign: "center", fontWeight: "bolder" }}>
         Add Reminder
       </div>
 
@@ -101,20 +93,23 @@ setAddText('');
           ))}
         </select>
       </div>
-      <>
-       { selectedDate && (<form onSubmit={handleSubmit}>
-        {selectedDate} is & reminder is &nbsp;
-        <input 
-        style={{color:'red',border:'2px solid black'}}
-        type="text"
-        value={addText}
-        onChange={handleText}
-        />
-          <button type="submit">save</button>
-        </form>)
-         }     
-      </>
-      
+      <br />
+      {/* { moment(selectedDate).format("dddd DD-MM-YYYY")} */}
+      <div>
+        {selectedDate && (
+          <>
+            <form onSubmit={handleSubmit}>
+              <input
+                style={{ border: "2px solid blue" }}
+                type="text"
+                value={addReminder}
+                onChange={(e) => setAddReminder(e.target.value)}
+              />
+              <button type="submit">Save</button>
+            </form>
+          </>
+        )}
+      </div>
     </>
   );
 }

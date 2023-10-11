@@ -3,11 +3,10 @@ import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
 import thunk from "redux-thunk";
 import { combineReducers } from "@reduxjs/toolkit";
-import reminderReducer from './reminderSlice'
-import dateReducer from './dateSlice'
+import reminderReducer from "./reminderSlice";
+
 const rootReducer = combineReducers({
-reminder:reminderReducer,
-dated:dateReducer
+  reminder: reminderReducer,
 });
 
 const persistConfig = {
@@ -18,7 +17,7 @@ const persistConfig = {
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
-  reducer: persistedReducer, 
+  reducer: persistedReducer,
   devTools: process.env.NODE_ENV !== "production",
   middleware: [thunk],
 });
