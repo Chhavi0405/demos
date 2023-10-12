@@ -9,6 +9,7 @@ export default function Home() {
   const [dateArray, setDateArray] = useState<any>([]);
   const [selectedDate, setSelectedDate] = useState<any>();
   const [addReminder, setAddReminder] = useState<any>([]);
+  // const [currentReminders, setCurrentReminders] = useState<any[]>([]);
   const dispatch = useDispatch();
 
   const dataReminder = useSelector((state: any) => state.reminder.data);
@@ -34,13 +35,14 @@ export default function Home() {
 
   const handleClick = (e: any) => {
     setSelectedDate(e);
+    // setCurrentReminders([])
   };
 
   const handleDateChange = (event: any) => {
     setSelectedDate(event.target.value);
   };
 
-  // const showData:[] = re
+  
   console.log(addReminder, "addremindr");
 
   const handleSubmit = (event: any) => {
@@ -59,68 +61,71 @@ export default function Home() {
     setAddReminder("");
   };
 
+
+
+
   return (
     <>
-      <div style={{ textAlign: "center", fontWeight: "bolder" }}>
-        Add Reminder
-      </div>
+    <div style={{ textAlign: "center", fontWeight: "bolder" }}>
+      Add Reminder
+    </div>
 
-      <div style={{ border: "2px solid blue", textAlign: "center" }}>
-        <label>choose Date </label>
-        <br />
-        <select
-          value={selectedDate || ""}
-          onChange={handleDateChange}
-          style={{ border: "2px solid black", textAlign: "center" }}
-        >
-          <option value="">Select a date</option>
-          {dateArray?.map((dates: any) => (
-            <option
-              key={dates}
-              style={{
-                color:
-                  dates >= moment().format("YYYY-MM-DD") ? "black" : "gray",
-              }}
-              value={dates}
-              onClick={() => {
-                if (dates >= moment().format("YYYY-MM-DD")) {
-                  handleClick(dates);
-                }
-              }}
-              disabled={dates < moment().format("YYYY-MM-DD")}
-            >
-              <>{moment(dates).format("DD MMMM YYYY")}</>
-            </option>
-          ))}
-        </select>
-      </div>
+    <div style={{ border: "2px solid blue", textAlign: "center" }}>
+      <label>choose Date </label>
       <br />
-      {/* { moment(selectedDate).format("dddd DD-MM-YYYY")} */}
-      <div>
-        {selectedDate && (
-          <>
-            <form onSubmit={handleSubmit}>
-              <input
-                style={{ border: "2px solid blue" }}
-                type="text"
-                value={addReminder}
-                onChange={(e) => setAddReminder(e.target.value)}
-              />
-              <button type="submit">Save</button>
-            </form>
-          </>
-        )}
-      </div>
+      <select
+        value={selectedDate || ""}
+        onChange={handleDateChange}
+        style={{ border: "2px solid black", textAlign: "center" }}
+      >
+        <option value="">Select a date</option>
+        {dateArray?.map((dates: any) => (
+          <option
+            key={dates}
+            style={{
+              color:
+                dates >= moment().format("YYYY-MM-DD") ? "black" : "gray",
+            }}
+            value={dates}
+            onClick={() => {
+              if (dates >= moment().format("YYYY-MM-DD")) {
+                handleClick(dates);
+              }
+            }}
+            disabled={dates < moment().format("YYYY-MM-DD")}
+          >
+            <>{moment(dates).format("DD MMMM YYYY")}</>
+          </option>
+        ))}
+      </select>
+    </div>
+    <br />
+    {/* { moment(selectedDate).format("dddd DD-MM-YYYY")} */}
+    <div>
+      {selectedDate && (
+        <>
+          <form onSubmit={handleSubmit}>
+            <input
+              style={{ border: "2px solid blue" }}
+              type="text"
+              value={addReminder}
+              onChange={(e) => setAddReminder(e.target.value)}
+            />
+            <button type="submit">Save</button>
+          </form>
+        </>
+      )}
+    </div>
 
-      <div>
-        <p>Data</p>
-        <ul>
-    {dataReminder?.map((item: any, index: any) => (
-      <li key={index}>{item?.text}</li>
-    ))}
-  </ul>
+    <div>
+      <p>Data</p>
+      <ul>
+  {dataReminder?.map((item: any, index: any) => (
+    <li key={index}>{moment(item?.dated).format('dddd DD-MM-YY')}&nbsp;{item?.text}</li>
+  ))}
+</ul>
 
-      </div>
-    </>
+    </div>
+  </>
   );
 }
