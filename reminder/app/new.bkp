@@ -10,13 +10,13 @@ export default function Home() {
   const [selectedDate, setSelectedDate] = useState<any>();
   const [addReminder, setAddReminder] = useState<any>("");
   const [reminderText, setReminderText] = useState<any>([
-   { date:"",reminders:[]}
+    { date: "", reminders: [] },
   ]);
   const dispatch = useDispatch();
 
   
   const dataReminder = useSelector((state: any) => state.reminder.data);
-  // console.log(dataReminder, "dataReminder");
+  console.log(dataReminder, "dataReminder");
   
 useEffect(()=>{
 // {dataReminder?.map((item:any)=>(...item , date:()))}
@@ -25,50 +25,22 @@ useEffect(()=>{
  
 const flattenArray:[]= dataReminder.flat();
 console.log(flattenArray,"flat");
-
-
-
-
-// const result:any = [];
-// flattenArray.forEach((e:any, i:any) => {
-//    const indexOfExisting = result.findIndex((x:any) =>  x.date === selectedDate);
-//    if (indexOfExisting === -1) {
-//      result.push({
-//          date: selectedDate,
-//          reminders: [e.reminders]
-//      })
-//    } else {
-//      result[indexOfExisting].reminders.push(e.reminders);
-//    }
-// });
-
-// console.log(result,"wert")
-
-
-// const dateIndex :any
+const dateIndex :any= 
 // flattenArray.findIndex(
 //   (item: any) => (
-//     (item?.date === selectedDate))
+//     (item.date === selectedDate))
 // );
 
-
-// const arrayHashmap = flattenArray.reduce((obj:any, item:any) => {
-//   obj[item.date] ? obj[item.date].reminders.push(...item.reminders) : (obj[item.date] = { ...item });
-//   return obj;
-// }, {});
-
-// console.log(arrayHashmap,"arrayhashmap")
-// const mergedArray = Object.values(arrayHashmap);
-
-// console.log(mergedArray,"mergedArray");
-
-
+// dateIndex?.map((s:any)=>{console.log(s,"find")})
 
 Object.keys(flattenArray).forEach(function(key:any, index:any) {
+  // dateIndex[key].map((itemValue))
   console.log( flattenArray[key],"object")
 });
 
-
+// const filterd= flattenArray.filter(e => e === '')
+// console.log(filterd,"filtered")
+// let originalData:any=[];
 
 
   const lengths = dataReminder.map((a: any) => a.length);
