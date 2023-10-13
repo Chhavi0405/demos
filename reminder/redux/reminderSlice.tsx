@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  data: [{date:"",reminder:[]}],
+  data: [],
 };
 
 export const reminderSlice :any= createSlice({

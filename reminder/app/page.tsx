@@ -6,13 +6,15 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function Home() {
+  const dataReminder = useSelector((state: any) => state.reminder.data);
   const [dateArray, setDateArray] = useState<any>([]);
   const [selectedDate, setSelectedDate] = useState<any>();
   const [addReminder, setAddReminder] = useState<any>("");
-  const [reminderText,setReminderText]=useState<any>([{date:"",reminders:[]}])
+  const [reminderText, setReminderText] = useState<any>([
+    { date: "", reminders: [] },
+  ]);
   const dispatch = useDispatch();
 
-  const dataReminder = useSelector((state: any) => state.reminder.data);
   console.log(dataReminder, "selector");
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -46,38 +48,30 @@ export default function Home() {
     setSelectedDate(event.target.value);
   };
 
-  
-
-  const handleSubmit = (event: any) => {
-    event.preventDefault();
-    // const prevData = useSelect() // []
-    // const dataReminder = useSelector((state: any) => state.reminder.data);
-    // console.log(dataReminder,"selector")
-    
-    if (selectedDate ) {
-     
- setReminderText((prevState:any)=>{
-  const duplicatDate=prevState.find((item :any)=>item.date ===selectedDate)
-  console.log(duplicatDate,"duplicate")
-  if(duplicatDate){
-    return(
-      prevState.map((item:any)=>(
-        item?.date === selectedDate ? {...item,reminders:[...item.reminders,addReminder]} : item
-      ))
-    )
-  }
-else{
-  return [...prevState,{date:selectedDate,reminders:[addReminder]}]
-}
-})
-
-dispatch(reminderAdd(reminderText))
-
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    if (selectedDate && addReminder) {
+      const updatedReminderText = [...reminderText];
+      const dateIndex = updatedReminderText.findIndex(
+        (item: any) => item.date === selectedDate
+      );
+      console.log(dateIndex, "dateIndex");
+      if (dateIndex !== -1) {
+        updatedReminderText[dateIndex] = {
+          date: selectedDate,
+          reminders: [...updatedReminderText[dateIndex].reminders, addReminder],
+        };
+      } else {
+        updatedReminderText.push({
+          date: selectedDate,
+          reminders: [addReminder],
+        });
+      }
+      setReminderText(updatedReminderText);
+      dispatch(reminderAdd(updatedReminderText));
     }
-
     setAddReminder("");
   };
-  console.log(selectedDate,"adds")
 
   return (
     <>
@@ -125,9 +119,9 @@ dispatch(reminderAdd(reminderText))
               value={addReminder}
               onChange={(e) => setAddReminder(e.target.value)}
             />
-            <br/>
+            <br />
             {/* <button type="button" onClick={handleAddMore}>add More</button> */}
-            <br/>
+            <br />
             <button type="submit">Save</button>
           </form>
         )}
@@ -135,10 +129,10 @@ dispatch(reminderAdd(reminderText))
       <div>
         <p>Data</p>
         <ul>
-          {dataReminder?.map((item: any, index: any) => (
-            <li key={index}>
-              {item.date} -- {item.reminder}
-            </li>
+          {dataReminder?.map((item: any, index: any) => ( console.log(item,"itemdispatch")
+            // <li key={index}>
+            //   {item.date} -- {item.reminder}
+            // </li>
           ))}
         </ul>
       </div>
