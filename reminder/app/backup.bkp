@@ -1,0 +1,186 @@
+"use client";
+
+import { reminderAdd } from "@/redux/reminderSlice";
+import moment from "moment";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+export default function Home() {
+  const [dateArray, setDateArray] = useState<any>([]);
+  const [selectedDate, setSelectedDate] = useState<any>();
+  const [addReminder, setAddReminder] = useState<any>([]);
+  const [selectedDates, setSelectedDates] = useState<any>([]);
+  // const [matchDate ,setMatchDate] = useState<any>([])
+  // const [currentReminders, setCurrentReminders] = useState<any[]>([]);
+  const dispatch = useDispatch();
+
+  const dataReminder = useSelector((state: any) => state.reminder.data);
+  // console.log(dataReminder,"selector")
+
+ const matchDates:any  = [selectedDate]
+//  matchDates.unshift(...matchDates,selectedDate)
+//  matchDates.unshift(selectedDate)
+// matchDates.push(selectedDate)
+// matchDates.push(...matchDates,selectedDate)
+
+  // console.log(matchDates,"matched")
+
+// console.log(selectedDate,"selected")
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const getDate = () => {
+    var dateArray = [];
+    var currentDate = moment(startOfMonth);
+    var stopDate = moment(endOfMonth);
+    while (currentDate <= stopDate) {
+      dateArray.push(moment(currentDate).format("YYYY-MM-DD"));
+      currentDate = moment(currentDate).add(1, "days");
+    }
+    setDateArray(dateArray.map((x) => x));
+  };
+
+  useEffect(() => {
+    getDate();
+  }, []);
+
+  const startOfMonth: any = moment().startOf("month").format("YYYY-MM-DD ");
+  const endOfMonth: any = moment().endOf("month").format("YYYY-MM-DD ");
+
+  const handleClick = (e: any) => {
+    // const arr:any =[];
+      setSelectedDate(e.target.value)
+   
+      if (!selectedDates.includes(e)) {
+        setSelectedDates([...selectedDates, e]);
+      }
+    // arr.push(selectedDate)
+
+    // console.log(arr,"arr")
+    // setCurrentReminders([])
+    // var arr = []; {
+    //   arr.push(e.target.value); 
+    // }
+
+    // console.log(arr,"Arr");
+
+    // setMatchDate([
+    //   ...matchDate,
+    //   {  selectedDate: selectedDate }
+    // ]);
+
+  };
+  console.log(selectedDates,"qwerts",selectedDate)
+  // console.log(matchDate,"handleClick")
+
+  const handleDateChange = (event: any) => {
+    setSelectedDate(event.target.value);
+  };
+
+  
+  // console.log(addReminder, "addremindr");
+
+  const handleSubmit = (event: any) => {
+    event.preventDefault();
+    // console.log(addReminder, "value");
+
+    if (selectedDate && addReminder) {
+      const reminderData: any = {
+        dated: selectedDate,
+        text: addReminder,
+      };
+
+      dispatch(reminderAdd(reminderData));
+    }
+
+    setAddReminder("");
+  };
+
+// const handleAdd=()=>{
+//   const abc = [...currentReminders,[]]
+//   setCurrentReminders(abc)
+// }
+// console.log(currentReminders,"curr")
+
+
+  return (
+    <>
+    <div style={{ textAlign: "center", fontWeight: "bolder" }}>
+      Add Reminder
+    </div>
+
+    <div style={{ border: "2px solid blue", textAlign: "center" }}>
+      <label>choose Date </label>
+      <br />
+      <select
+        value={selectedDate || ""}
+        onChange={handleDateChange}
+        style={{ border: "2px solid black", textAlign: "center" }}
+      >
+        <option value="">Select a date</option>
+        {dateArray?.map((dates: any) => (
+          <option
+            key={dates}
+            style={{
+              color:
+                dates >= moment().format("YYYY-MM-DD") ? "black" : "gray",
+            }}
+            value={dates}
+            onClick={() => {
+              if (dates >= moment().format("YYYY-MM-DD")) {
+                handleClick(dates);
+              }
+            }}
+            disabled={dates < moment().format("YYYY-MM-DD")}
+          >
+            <>{moment(dates).format("DD MMMM YYYY")}</>
+          </option>
+        ))}
+      </select>
+    </div>
+    <br />
+    { moment(selectedDate).format("dddd DD-MM-YYYY")}
+    <div>
+      {selectedDate && (
+           <form onSubmit={handleSubmit}> 
+             {/* <button onClick={()=>{handleAdd()}}>add</button> */}
+            {/* {currentReminders.map((curr:any,i:any)=>(
+              <input
+              key={i}
+              style={{ border: "2px solid blue" }}
+              type="text"
+              value={curr}
+              onChange={(e) => setAddReminder(e.target.value)}
+            />
+            ))}  */}
+             <input 
+               style={{ border: "2px solid blue" }} 
+               type="text" 
+               value={addReminder} 
+               onChange={(e) => setAddReminder(e.target.value)} 
+             /> 
+             <button type="submit">Save</button> 
+           </form> 
+      )}
+      </div>
+    {/* <div>
+      <p>Data</p>
+      <ul>
+  {dataReminder?.map((item: any, index: any) => (
+    <li key={index}>{moment(item?.dated).format('dddd DD-MM-YY')}&nbsp;{item?.text}</li>
+  ))}
+</ul>
+
+    </div> */}
+
+
+{/* <div>
+      <p>Selected Dates</p>
+      <ul>
+        {selectedDates.map((date: any, index: number) => {console.log(date,"datessss")}
+        
+          // <li key={index}>{moment(date).format("DD MMMM YYYY")}</li>
+        )}
+      </ul>
+    </div> */}
+  </>
+  );
+}
