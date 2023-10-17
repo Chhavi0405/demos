@@ -1,5 +1,5 @@
 "use client";
-
+"use strict";
 import { reminderAdd } from "@/redux/reminderSlice";
 import moment from "moment";
 import { useEffect, useState } from "react";
@@ -10,70 +10,36 @@ export default function Home() {
   const [selectedDate, setSelectedDate] = useState<any>();
   const [addReminder, setAddReminder] = useState<any>("");
   const [reminderText, setReminderText] = useState<any>([
-   { date:"",reminders:[]}
+    { date: "", reminders: [] },
   ]);
   const dispatch = useDispatch();
 
-  
   const dataReminder = useSelector((state: any) => state.reminder.data);
-  // console.log(dataReminder, "dataReminder");
-  
-useEffect(()=>{
-// {dataReminder?.map((item:any)=>(...item , date:()))}
-// console.log(dataReminder,"dta")
-},[])
- 
-const flattenArray:[]= dataReminder.flat();
-console.log(flattenArray,"flat");
+  console.log(dataReminder, "dataReminder");
 
+  // useEffect(() => {
+  //   const flattenArray: any[] = dataReminder.flat();
+  //   let savedValue: any[] = [...flattenArray];
+  //   //  console.log(addReminder,"addReminder")
+  //   flattenArray?.map((flatArray: any) => {
+  //     if (flatArray.date === selectedDate) {
+  //       const index = savedValue.findIndex(
+  //         (item) => item.date === selectedDate
+  //       );
+  //       console.log(index, "index");
+  //       if (index !== -1 && selectedDate) {
+  //         savedValue[index].reminders.push(addReminder);
+  //       } else {
+  //         savedValue.push({
+  //           date: selectedDate,
+  //           reminders: [addReminder],
+  //         });
+  //       }
+  //     }
+  //   });
 
-
-
-// const result:any = [];
-// flattenArray.forEach((e:any, i:any) => {
-//    const indexOfExisting = result.findIndex((x:any) =>  x.date === selectedDate);
-//    if (indexOfExisting === -1) {
-//      result.push({
-//          date: selectedDate,
-//          reminders: [e.reminders]
-//      })
-//    } else {
-//      result[indexOfExisting].reminders.push(e.reminders);
-//    }
-// });
-
-// console.log(result,"wert")
-
-
-// const dateIndex :any
-// flattenArray.findIndex(
-//   (item: any) => (
-//     (item?.date === selectedDate))
-// );
-
-
-// const arrayHashmap = flattenArray.reduce((obj:any, item:any) => {
-//   obj[item.date] ? obj[item.date].reminders.push(...item.reminders) : (obj[item.date] = { ...item });
-//   return obj;
-// }, {});
-
-// console.log(arrayHashmap,"arrayhashmap")
-// const mergedArray = Object.values(arrayHashmap);
-
-// console.log(mergedArray,"mergedArray");
-
-
-
-Object.keys(flattenArray).forEach(function(key:any, index:any) {
-  console.log( flattenArray[key],"object")
-});
-
-
-
-
-  const lengths = dataReminder.map((a: any) => a.length);
-  lengths.indexOf(Math.max(...lengths));
- 
+  //   console.log(savedValue, "savedvalue");
+  // }, [dataReminder, selectedDate, addReminder]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const getDate = () => {
@@ -91,8 +57,8 @@ Object.keys(flattenArray).forEach(function(key:any, index:any) {
     getDate();
   }, []);
 
-  const startOfMonth: any = moment().startOf("month").format("YYYY-MM-DD ");
-  const endOfMonth: any = moment().endOf("month").format("YYYY-MM-DD ");
+  const startOfMonth: string = moment().startOf("month").format("YYYY-MM-DD ");
+  const endOfMonth: string = moment().endOf("month").format("YYYY-MM-DD ");
 
   const handleClick = (e: any) => {
     setSelectedDate(e.target.value);
@@ -101,32 +67,48 @@ Object.keys(flattenArray).forEach(function(key:any, index:any) {
   const handleDateChange = (event: any) => {
     setSelectedDate(event.target.value);
   };
-
+  //******************************************************************************************* */
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    if (selectedDate && addReminder) {
-      const updatedReminderText = [...reminderText];
-      console.log(updatedReminderText,"reminder text");
-      
-      const dateIndex = updatedReminderText.findIndex(
-        (item: any) => item.date === selectedDate
-      );
-      if (dateIndex !== -1) {
-        updatedReminderText[dateIndex] = {
-          date: selectedDate,
-          reminders: [...updatedReminderText[dateIndex].reminders, addReminder],
-        };
+    console.log(">>>>", dataReminder);
+
+    // const updatedReminderText = [...reminderText];
+    // if (selectedDate) {
+    //   const dateIndex = updatedReminderText.findIndex(
+    //     (item: any) => item.date === selectedDate
+    //   );
+    //   console.log(dateIndex, "dateIndex");
+    //   if (dateIndex !== -1) {
+    //     console.log("first");
+    //     updatedReminderText[dateIndex] = {
+    //       date: selectedDate,
+    //       reminders: [
+    //         ...updatedReminderText[dateIndex]?.reminders,
+    //         addReminder,
+    //       ],
+    //     };
+    //   } else {
+    //     console.log("second");
+    //     updatedReminderText.push({
+    //       date: selectedDate,
+    //       reminders: [addReminder],
+    //     });
+    //   }
+    let initional = [{ date: selectedDate, reminders: [addReminder] }];
+    let newArr = dataReminder?.map((items: any) => {
+      console.log("items", items);
+      debugger;
+      if (items.date == selectedDate) {
+        return { ...items, reminders: [...items.reminder, addReminder] };
       } else {
-        updatedReminderText.push({
-          date: selectedDate,
-          reminders: [addReminder],
-        });
+        return [dataReminder, { date: selectedDate, reminders: [addReminder] }];
       }
-      setReminderText(updatedReminderText);
-      dispatch(reminderAdd(updatedReminderText));
-    }
-    setAddReminder("");
+    });
+
+    // setReminderText(newArr);
+    dispatch(reminderAdd(newArr));
   };
+  // setAddReminder("");
 
   return (
     <>
@@ -184,13 +166,12 @@ Object.keys(flattenArray).forEach(function(key:any, index:any) {
       <div>
         <p>Data</p>
         <ul>
-          {/* {dataReminder?.map((item: any, index: any) => ( 
+          {dataReminder?.map((item: any, index: number) => ( 
             console.log(item,"itemdispatch")
-            <li key={index}>
-              {item.date} -- {item.reminder}
-            </li>
-          ))} */}
-          
+            // <li key={index}>
+            //   {item.date} -- {item.reminders}
+            // </li>
+          ))}
         </ul>
       </div>
     </>

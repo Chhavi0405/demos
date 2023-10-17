@@ -4,16 +4,27 @@ const initialState = {
   data: [],
 };
 
-export const reminderSlice :any= createSlice({
+export const reminderSlice: any = createSlice({
   name: "reminder",
   initialState,
   reducers: {
     reminderAdd: (state: any, action: any) => {
-      state.data.push(action.payload);
+      state.data= action.payload;
+      // state.data.push(action.payload);
       // console.log("first",state.data.push(action.payload))
     },
   },
 });
+// export const reminderSlice :any= createSlice({
+//   name: "reminder",
+//   initialState,
+//   reducers: {
+//     reminderAdd: (state: any, action: any) => {
+//       state.data.push(action.payload);
+//       console.log("first",state.data.push(action.payload))
+//     },
+//   },
+// });
 export const { reminderAdd } = reminderSlice.actions;
 
 export default reminderSlice.reducer;
