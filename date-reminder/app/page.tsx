@@ -4,15 +4,21 @@ import { reminderAdd } from "@/redux/reminderSlice";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+
+interface ReminderItem {
+  date: string;
+  reminders: string[];
+}
 
 export default function Home() {
   const [dateArray, setDateArray] = useState<string[]>([]);
   const [selectedDate, setSelectedDate] = useState<string>();
   const [addReminder, setAddReminder] = useState<string>("");
-  const [reminderText, setReminderText] = useState<string[]>([]);
+  const [reminderText, setReminderText] = useState<ReminderItem[]>([]);
   const dispatch = useDispatch();
 
-  const dataReminder = useSelector((state:any) => state.reminder.data);
+  const dataReminder = useSelector((state: RootState) => state.reminder.data);
 
   useEffect(() => {
     console.log("a", dataReminder, selectedDate);
@@ -38,21 +44,21 @@ export default function Home() {
   const startOfMonth: string = moment().startOf("month").format("YYYY-MM-DD ");
   const endOfMonth: string = moment().endOf("month").format("YYYY-MM-DD ");
 
-  const handleClick = (e: any) => {
-    setSelectedDate(e.target.value);
+  const handleClick = (e: string) => {
+    setSelectedDate(e);
   };
 
-  const handleDateChange = (event: any) => {
+  const handleDateChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedDate(event.target.value);
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (selectedDate && addReminder) {
-      let updatedReminderText: any = [...reminderText];
+      const updatedReminderText: ReminderItem[] = [...reminderText];
 
       const dateIndex = updatedReminderText.findIndex(
-        (item:any) => item.date === selectedDate
+        (item: { date: string }) => item.date === selectedDate
       );
       if (dateIndex !== -1) {
         updatedReminderText[dateIndex] = {
@@ -65,8 +71,8 @@ export default function Home() {
           reminders: [addReminder],
         });
       }
-      setReminderText(updatedReminderText);
       dispatch(reminderAdd(updatedReminderText));
+      setReminderText(updatedReminderText);
     }
     setAddReminder("");
   };
@@ -126,13 +132,11 @@ export default function Home() {
       <div>
         <p>Data</p>
         <ul>
-          
-           {dataReminder?.map((item: any) => ( 
-            <li key={item}>
-              {moment(item?.date).format('dddd DD-MM-YY')} - {item?.reminders}
+          {reminderText.map((item: ReminderItem) => (
+            <li key={item.date}>
+              {moment(item.date).format("dddd DD-MM-YY")} - {item.reminders}
             </li>
           ))}
-          
         </ul>
       </div>
     </>

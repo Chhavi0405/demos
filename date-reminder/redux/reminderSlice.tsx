@@ -1,7 +1,12 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
+interface ReminderItem {
+  date: string;
+  reminders: string[];
+}
 
 interface dataState {
-  data: string[]
+  data: ReminderItem[];
 }
 
 const initialState = {
@@ -12,7 +17,7 @@ export const reminderSlice = createSlice({
   name: "reminder",
   initialState,
   reducers: {
-    reminderAdd: (state, action) => {
+    reminderAdd: (state, action:PayloadAction<ReminderItem[]>) => {
       state.data = action.payload;
     },
   },
