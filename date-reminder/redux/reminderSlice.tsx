@@ -1,16 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+interface dataState {
+  data: string[]
+}
+
 const initialState = {
   data: [],
-};
+}as dataState
 
-export const reminderSlice :any= createSlice({
+export const reminderSlice = createSlice({
   name: "reminder",
   initialState,
   reducers: {
-    reminderAdd: (state: any, action: any) => {
+    reminderAdd: (state, action) => {
       state.data = action.payload;
-      // console.log("first",state.data.push(action.payload))
     },
   },
 });

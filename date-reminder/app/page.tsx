@@ -6,13 +6,13 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function Home() {
-  const [dateArray, setDateArray] = useState<any>([]);
-  const [selectedDate, setSelectedDate] = useState<any>();
-  const [addReminder, setAddReminder] = useState<any>("");
-  const [reminderText, setReminderText] = useState<any>([]);
+  const [dateArray, setDateArray] = useState<string[]>([]);
+  const [selectedDate, setSelectedDate] = useState<string>();
+  const [addReminder, setAddReminder] = useState<string>("");
+  const [reminderText, setReminderText] = useState<string[]>([]);
   const dispatch = useDispatch();
 
-  const dataReminder = useSelector((state: any) => state.reminder.data);
+  const dataReminder = useSelector((state:any) => state.reminder.data);
 
   useEffect(() => {
     console.log("a", dataReminder, selectedDate);
@@ -35,8 +35,8 @@ export default function Home() {
     getDate();
   }, []);
 
-  const startOfMonth: any = moment().startOf("month").format("YYYY-MM-DD ");
-  const endOfMonth: any = moment().endOf("month").format("YYYY-MM-DD ");
+  const startOfMonth: string = moment().startOf("month").format("YYYY-MM-DD ");
+  const endOfMonth: string = moment().endOf("month").format("YYYY-MM-DD ");
 
   const handleClick = (e: any) => {
     setSelectedDate(e.target.value);
@@ -52,7 +52,7 @@ export default function Home() {
       let updatedReminderText: any = [...reminderText];
 
       const dateIndex = updatedReminderText.findIndex(
-        (item: any) => item.date === selectedDate
+        (item:any) => item.date === selectedDate
       );
       if (dateIndex !== -1) {
         updatedReminderText[dateIndex] = {
@@ -86,7 +86,7 @@ export default function Home() {
           style={{ border: "2px solid black", textAlign: "center" }}
         >
           <option value="">Select a date</option>
-          {dateArray?.map((dates: any) => (
+          {dateArray?.map((dates: string) => (
             <option
               key={dates}
               style={{
@@ -127,7 +127,7 @@ export default function Home() {
         <p>Data</p>
         <ul>
           
-           {dataReminder?.map((item: any, index: number) => ( 
+           {dataReminder?.map((item: any) => ( 
             <li key={item}>
               {moment(item?.date).format('dddd DD-MM-YY')} - {item?.reminders}
             </li>
