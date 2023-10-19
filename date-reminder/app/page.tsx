@@ -5,6 +5,7 @@ import moment from "moment";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import _ from 'lodash';
 
 interface ReminderItem {
   date: string;
@@ -34,7 +35,8 @@ export default function Home() {
       dateArray.push(moment(currentDate).format("YYYY-MM-DD"));
       currentDate = moment(currentDate).add(1, "days");
     }
-    setDateArray(dateArray.map((x) => x));
+    // setDateArray(dateArray.map((x) => x));
+    setDateArray(_.map(dateArray,(x)=>x))
   };
 
   useEffect(() => {
@@ -57,9 +59,10 @@ export default function Home() {
     if (selectedDate && addReminder) {
       const updatedReminderText: ReminderItem[] = [...reminderText];
 
-      const dateIndex = updatedReminderText.findIndex(
-        (item: { date: string }) => item.date === selectedDate
-      );
+      // const dateIndex = updatedReminderText.findIndex(
+      //   (item: { date: string }) => item.date === selectedDate
+      // );
+      const dateIndex = _.findIndex(updatedReminderText,(item: { date: string }) => item.date === selectedDate)
       if (dateIndex !== -1) {
         updatedReminderText[dateIndex] = {
           date: selectedDate,
@@ -92,7 +95,7 @@ export default function Home() {
           style={{ border: "2px solid black", textAlign: "center" }}
         >
           <option value="">Select a date</option>
-          {dateArray?.map((dates: string) => (
+          {/* {dateArray?.map((dates: string) => (
             <option
               key={dates}
               style={{
@@ -109,6 +112,24 @@ export default function Home() {
             >
               <>{moment(dates).format("DD MMMM YYYY")}</>
             </option>
+          ))} */}
+          {_.map(dateArray,(dates)=>(
+            <option
+            key={dates}
+            style={{
+              color:
+                dates >= moment().format("YYYY-MM-DD") ? "black" : "gray",
+            }}
+            value={dates}
+            onClick={() => {
+              if (dates >= moment().format("YYYY-MM-DD")) {
+                handleClick(dates);
+              }
+            }}
+            disabled={dates < moment().format("YYYY-MM-DD")}
+          >
+            <>{moment(dates).format("DD MMMM YYYY")}</>
+          </option>
           ))}
         </select>
       </div>
@@ -132,11 +153,20 @@ export default function Home() {
       <div>
         <p>Data</p>
         <ul>
-          {reminderText.map((item: ReminderItem) => (
-            <li key={item.date}>
-              {moment(item.date).format("dddd DD-MM-YY")} - {item.reminders}
-            </li>
-          ))}
+          {
+          // reminderText.map((item: ReminderItem) => (
+          //   <li key={item.date}>
+          //     {moment(item.date).format("dddd DD-MM-YY")} - {item.reminders}
+          //   </li>
+          // ))
+          }
+       {_.map(_.sortBy(reminderText, 'date'), (item) => (
+  <li key={item.date}>
+    {moment(item.date).format("dddd DD/MM/YY")} :- {item.reminders}
+  </li>
+))}
+                      
+          
         </ul>
       </div>
     </>
