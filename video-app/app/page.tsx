@@ -3,7 +3,8 @@ import { useState, useEffect } from 'react';
 
 const VideoList = () => {
   const videos = [
-    { id: "vid1", videosrc: "/videos/154792 (540p).mp4", videoAlt: "q1547" },
+    { id: "vid1", videosrc: "/videos/154792 (540p).mp4", 
+      videoAlt: "q1547" },
     {
       id: "vid2",
       videosrc: "/videos/aircraft_-_51501 (540p).mp4",
