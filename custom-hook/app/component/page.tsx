@@ -1,4 +1,4 @@
-import { daysToWeeks, formatDistance } from "date-fns"
+import { daysToWeeks, formatDistance, isAfter } from "date-fns"
 
 
    export const days2Week=(value:number)=>{
@@ -8,7 +8,9 @@ import { daysToWeeks, formatDistance } from "date-fns"
      export const formatDistanceDate =(date1:Date|number ,date2:Date|number)=>{
               return  (formatDistance(date1,date2))
              }
-
+             export const isAfterdate=(value:Date|number,compvalue:Date|number)=>{
+               return(isAfter(value,compvalue))
+             }
 
 // 'use client'
 // import { daysToWeeks, formatDistance, isAfter } from "date-fns";
@@ -25,9 +27,9 @@ import { daysToWeeks, formatDistance } from "date-fns"
 //         setIsInput(daysToWeeks(value))
 //      }
      
-//      function isAfterdate(value:Date|number,compvalue:Date|number){
-//         setIsInput(isAfter(value,compvalue))
-//      }
+    //  function isAfterdate(value:Date|number,compvalue:Date|number){
+    //     setIsInput(isAfter(value,compvalue))
+    //  }
 
 //     
 
