@@ -5,7 +5,7 @@ import moment from "moment";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import _ from 'lodash';
+import { map, sortBy, findIndex } from "lodash";
 
 interface ReminderItem {
   date: string;
@@ -28,30 +28,36 @@ export default function Home() {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const getDate = () => {
-    let dateArray = [];
+    let temp = [];
     let currentDate = moment(startOfMonth);
+    console.log(currentDate, "currentdate");
     let stopDate = moment(endOfMonth);
+
+    console.log(stopDate, "stop");
     while (currentDate <= stopDate) {
-      dateArray.push(moment(currentDate).format("YYYY-MM-DD"));
+      temp.push(moment(currentDate).format("DD-MMMM-YYYY"));
       currentDate = moment(currentDate).add(1, "days");
     }
-    // setDateArray(dateArray.map((x) => x));
-    setDateArray(_.map(dateArray,(x)=>x))
+    setDateArray(temp);
   };
-
+  console.log(dateArray, "dateArray");
   useEffect(() => {
     getDate();
+    console.log("first");
+    
   }, []);
 
-  const startOfMonth: string = moment().startOf("month").format("YYYY-MM-DD ");
-  const endOfMonth: string = moment().endOf("month").format("YYYY-MM-DD ");
+  const startOfMonth: string = moment()
+    .startOf("month")
+    .format("DD-MMMM-YYYY ");
+  const endOfMonth: string = moment().endOf("month").format("DD-MMMM-YYYY ");
 
-  const handleClick = (e: string) => {
-    setSelectedDate(e);
-  };
+  // const handleClick = (e: string) => {
+  //   setSelectedDate(e);
+  // };
 
   const handleDateChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedDate(event.target.value);
+      setSelectedDate(event.target.value)
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -59,10 +65,10 @@ export default function Home() {
     if (selectedDate && addReminder) {
       const updatedReminderText: ReminderItem[] = [...reminderText];
 
-      // const dateIndex = updatedReminderText.findIndex(
-      //   (item: { date: string }) => item.date === selectedDate
-      // );
-      const dateIndex = _.findIndex(updatedReminderText,(item: { date: string }) => item.date === selectedDate)
+      const dateIndex = findIndex(
+        updatedReminderText,
+        (item: { date: string }) => item.date === selectedDate
+      );
       if (dateIndex !== -1) {
         updatedReminderText[dateIndex] = {
           date: selectedDate,
@@ -80,62 +86,47 @@ export default function Home() {
     setAddReminder("");
   };
 
+  const sortedData: ReminderItem[] = sortBy(dataReminder, "date");
+  console.log(sortedData, "sorted");
+
   return (
     <>
-      <div style={{ textAlign: "center", fontWeight: "bolder" }}>
+      <h1 style={{ textAlign: "center", fontWeight: "bolder" }}>
         Add Reminder
-      </div>
+      </h1>
 
-      <div style={{ border: "2px solid blue", textAlign: "center" }}>
+      <div 
+        className="border-2 border-blue-500 text-center;"   >  
+      
         <label>choose Date </label>
         <br />
         <select
           value={selectedDate || ""}
           onChange={handleDateChange}
-          style={{ border: "2px solid black", textAlign: "center" }}
+          className="border-2 border-red-500 text-center;" 
         >
           <option value="">Select a date</option>
-          {/* {dateArray?.map((dates: string) => (
+
+          {map(dateArray, (dates) => {
+            return(
             <option
               key={dates}
               style={{
                 color:
-                  dates >= moment().format("YYYY-MM-DD") ? "black" : "gray",
+                  dates >= moment().format("DD-MMMM-YYYY") ? "black" : "gray",
               }}
               value={dates}
-              onClick={() => {
-                if (dates >= moment().format("YYYY-MM-DD")) {
-                  handleClick(dates);
-                }
-              }}
-              disabled={dates < moment().format("YYYY-MM-DD")}
+              disabled={dates < moment().format("DD-MMMM-YYYY")}
             >
               <>{moment(dates).format("DD MMMM YYYY")}</>
             </option>
-          ))} */}
-          {_.map(dateArray,(dates)=>(
-            <option
-            key={dates}
-            style={{
-              color:
-                dates >= moment().format("YYYY-MM-DD") ? "black" : "gray",
-            }}
-            value={dates}
-            onClick={() => {
-              if (dates >= moment().format("YYYY-MM-DD")) {
-                handleClick(dates);
-              }
-            }}
-            disabled={dates < moment().format("YYYY-MM-DD")}
-          >
-            <>{moment(dates).format("DD MMMM YYYY")}</>
-          </option>
-          ))}
+          )})}
         </select>
       </div>
+
       <br />
-      {moment(selectedDate).format("dddd DD-MM-YYYY")}
-      <div>
+      {/* {moment(selectedDate).format("dddd DD-MMMM-YYYY")} */}
+      <>
         {selectedDate && (
           <form onSubmit={handleSubmit}>
             <input
@@ -149,26 +140,25 @@ export default function Home() {
             <button type="submit">Save</button>
           </form>
         )}
-      </div>
-      <div>
-        <p>Data</p>
-        <ul>
-          {
-          // reminderText.map((item: ReminderItem) => (
-          //   <li key={item.date}>
-          //     {moment(item.date).format("dddd DD-MM-YY")} - {item.reminders}
-          //   </li>
-          // ))
-          }
-       {_.map(_.sortBy(reminderText, 'date'), (item) => (
-  <li key={item.date}>
-    {moment(item.date).format("dddd DD/MM/YY")} :- {item.reminders}
-  </li>
-))}
-                      
-          
-        </ul>
-      </div>
+      </>
+      
+      <>
+        <h3>Data</h3>
+
+        {map(sortedData,(item, index: number) => {
+          return(
+          <div key={index}>
+            {/* <h6>{moment(item.date).format("dddd DD-MMMM-YYYY ")}</h6> */}
+           <h6> {item?.date} </h6>
+            <ul>
+              {map(item?.reminders,(data, ReminderIndex: number) => {
+                return(
+                <li key={ReminderIndex}>{data}</li>
+              )})}
+            </ul>
+          </div>
+        )})}
+      </>
     </>
   );
 }
